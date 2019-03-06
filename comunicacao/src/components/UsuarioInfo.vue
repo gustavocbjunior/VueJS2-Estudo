@@ -3,7 +3,7 @@
         <h2>As Informações de Usuário</h2>
         <p>Vários detalhes...</p>
         <p>Nome do Usuário: <strong>{{ inverterNome() }}</strong></p>
-        <p>Idade do usuário <strong>{{ idade }}</strong></p>
+        <p>Idade do usuário <strong>{{ idadeData }}</strong></p>
         <button @click="reiniciarNome">Reiniciar Nome</button>
         <button @click="reiniciarFn()">Reiniciar Nome (Callback)</button>
     </div>
@@ -24,6 +24,11 @@ export default {
         reiniciarFn: Function,
         idade: Number
     },
+    data() {
+        return {
+            idadeData: this.idade
+        }
+    },
     methods: {
         inverterNome() {
             return this.nome.split('').reverse().join('');
@@ -34,8 +39,8 @@ export default {
         }
     },
     created() {
-        barramento.$on('idadeMudou', idade => {
-            this.idade = idade;
+        barramento.quandoIdadeMudar(idade => {
+            this.idadeData = idade;
         })
     }
 }
