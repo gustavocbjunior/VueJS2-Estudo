@@ -9,6 +9,7 @@
 
 <script>
     import Task from './Task.vue';
+
     export default {
         components: { Task },
         props: {
