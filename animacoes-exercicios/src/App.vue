@@ -2,7 +2,7 @@
 	<div id="app" class="container-fluid">
 		<h1>Animações</h1>
 		<hr>
-		<b-button variant="primary" class="mb-4" @click="exibir = !exibir">Mostrar mensagem</b-button>
+		<!-- <b-button variant="primary" class="mb-4" @click="exibir = !exibir">Mostrar mensagem</b-button> -->
 
 		<!-- <transition name="fade">
 			<b-alert variant="info" show v-if="exibir">{{ msg }}</b-alert>
@@ -19,22 +19,22 @@
 			leave-active-class="animated shake">
 			<b-alert variant="info" show v-if="exibir">{{ msg }}</b-alert>
 		</transition> -->
-		<hr>
+		<!-- <hr>
 		<b-select v-model="tipoAnimacao" class="mb-4">
 			<option value="fade">Fade</option>
 			<option value="slide">Slide</option>
-		</b-select>
+		</b-select> -->
 		<!-- MODE=OUT-IN indica que a animação de saida ocorrerá primeiro, 
 		para funcionar corretamente é necessário utilizar o atributo key -->
-		<transition :name="tipoAnimacao" mode="out-in">
+		<!-- <transition :name="tipoAnimacao" mode="out-in">
 			<b-alert variant="info" show v-if="exibir" key="info">{{ msg }}</b-alert>
 			<b-alert variant="warning" show v-else key="warn">{{ msg }}</b-alert>
-		</transition>
+		</transition> -->
 
-		<hr>
-		<button @click="exibir2 = !exibir2">Alternar</button>
+		<!-- <hr>
+		<button @click="exibir2 = !exibir2">Alternar</button> -->
 		<!-- css=false indica que a transição não será afetada por css -->
-		<transition
+		<!-- <transition
 			:css="false" 
 			@before-enter="beforeEnter"
 			@enter="enter"
@@ -57,7 +57,16 @@
 		</div>
 		<transition name="fade" mode="out-in">
 			<component :is="componenteSelecionado"></component>
-		</transition>
+		</transition> -->
+
+		<hr>
+		<b-button @click="adicionarAluno" class="mb-4">Adicionar Aluno</b-button>
+		<transition-group name="slide" tag="div">
+			<!-- para o transition-group é obrigatório a utilização da chave :key -->
+			<b-list-group v-for="(aluno, i) in alunos" :key="aluno">
+				<b-list-group-item @click="removerAluno(i)">{{ aluno }}</b-list-group-item>
+			</b-list-group>
+		</transition-group>
 	</div>
 </template>
 
@@ -69,6 +78,7 @@ export default {
 	components: { AlertaAdvertencia, AlertaInfo	},
 	data() {
 		return {
+			alunos: ['Roberto', 'Julia', 'Ana', 'Paulo'],
 			msg: 'Uma mensagem de informação para o usuário',
 			exibir: false,
 			exibir2: true,
@@ -78,6 +88,13 @@ export default {
 		}
 	},
 	methods: {
+		adicionarAluno(){
+			const s = Math.random().toString(36).substring(2)
+			this.alunos.push(s)
+		},
+		removerAluno(indice) {
+			this.alunos.splice(indice, 1)
+		},
 		animar(el, done, negativo) {
 			let rodada = 1
 			const temporizador = setInterval(() => {
@@ -187,12 +204,18 @@ export default {
 }
 
 .slide-leave-active {
+	position:absolute;
+	width: 100%;
 	animation: slide-out 2s ease;
 	transition: opacity 2s;
 }
 
 .slide-enter, .slide-leave-to {
 	opacity: 0;
+}
+
+.slide-mov {
+	transition: transform 1s;
 }
 
 </style>
