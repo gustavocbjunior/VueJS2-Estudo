@@ -32,8 +32,10 @@
 		</transition>
 
 		<hr>
-		<button @click="exibir2 = !exibir2">Mostrar</button>
+		<button @click="exibir2 = !exibir2">Alternar</button>
+		<!-- css=false indica que a transição não será afetada por css -->
 		<transition
+			:css="false" 
 			@before-enter="beforeEnter"
 			@enter="enter"
 			@after-enter="afterEnter"
@@ -45,49 +47,84 @@
 			@leave-cancelled="leaveCancelled">
 			<div v-if="exibir2" class="caixa"></div>
 		</transition>
+		
+		<hr>
+		<div class="mb-4">
+			<b-button variant="primary" class="mr-2"
+				@click="componenteSelecionado = 'AlertaInfo'">Info</b-button>
+			<b-button variant="secondary" 
+				@click="componenteSelecionado = 'AlertaAdvertencia'">Advertência</b-button>
+		</div>
+		<transition name="fade" mode="out-in">
+			<component :is="componenteSelecionado"></component>
+		</transition>
 	</div>
 </template>
 
 <script>
+import AlertaAdvertencia from './AlertaAdvertencia.vue'
+import AlertaInfo from './AlertaInfo.vue'
 
 export default {
+	components: { AlertaAdvertencia, AlertaInfo	},
 	data() {
 		return {
 			msg: 'Uma mensagem de informação para o usuário',
 			exibir: false,
 			exibir2: true,
-			tipoAnimacao: "fade"
+			tipoAnimacao: "fade",
+			larguraBase: 0,
+			componenteSelecionado: 'AlertaInfo'
 		}
 	},
 	methods: {
+		animar(el, done, negativo) {
+			let rodada = 1
+			const temporizador = setInterval(() => {
+				const novaLargura = this.larguraBase + (negativo ? -rodada * 10 : rodada * 10)
+				el.style.width = `${novaLargura}px`
+				rodada++
+				if(rodada > 30) {
+					clearInterval(temporizador)
+					done()
+				}
+			}, 20)
+
+		},
 		beforeEnter(el) {
-			console.log('beforeEnter');
+			//console.log('beforeEnter');
+			this.larguraBase = 0
+			el.style.width = `${this.larguraBase}px`
 		},
 		enter(el, done) {
-			console.log('enter');
+			/*console.log('enter');
 			// Se não chamar o done, o ciclo da animação será quebrado
-			done()
+			done()*/
+			this.animar(el, done, false)
 		},
-		afterEnter(el) {
-			console.log('afterEnter');
-		},
-		enterCancelled(el) {
-			console.log('enterCancelled');
-		},
+		// afterEnter(el) {
+		// 	console.log('afterEnter');
+		// },
+		// enterCancelled(el) {
+		// 	console.log('enterCancelled');
+		// },
 		beforeLeave(el) {
-			console.log('beforeLeave');
+			//console.log('beforeLeave');
+			this.larguraBase = 300
+			el.style.width = `${this.larguraBase}px`
 		},
 		leave(el, done) {
-			console.log('leave');
+			/*console.log('leave');
 			// Se não chamar o done, o ciclo da animação será quebrado
-			done()
+			done()*/
+			this.animar(el, done, true)
 		},
-		afterLeave(el) {
-			console.log('afterLeave');
-		},
-		leaveCancelled(el) {
-			console.log('leaveCancelled');
-		}
+		// afterLeave(el) {
+		// 	console.log('afterLeave');
+		// },
+		// leaveCancelled(el) {
+		// 	console.log('leaveCancelled');
+		// }
 	}
 }
 </script>
