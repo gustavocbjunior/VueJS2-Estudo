@@ -10,7 +10,7 @@ import UsuarioEditar from './components/usuario/UsuarioEditar'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
     mode: 'history',
     scrollBehavior(to, from, savedPosition) {
         if(savedPosition) {
@@ -51,3 +51,10 @@ export default new Router({
         redirect: '/'
     }]
 })
+
+router.beforeEach((to, from, next) => {
+    console.log('antes das rotas -> Global');
+    next()    
+})
+
+export default router

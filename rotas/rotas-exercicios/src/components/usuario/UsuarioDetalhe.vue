@@ -16,6 +16,16 @@
 <script>
 export default {
     props: ['id'],
+    beforeRouteEnter(to, from, next) {
+        console.log('dentro do componente -> usuário detalhe');
+        // neste ponto não é possível utilizar as propriedades do componente
+        // pode ser utilizado dentro next
+        // next(vm => {console.log(vm.id)})
+        next()
+
+        // pode ser utilizada para testar autenticação
+        // caso autenticado next(), não autenticado next(false)
+    }
     // data() {
     //     return {
     //         id: this.$route.params.id
