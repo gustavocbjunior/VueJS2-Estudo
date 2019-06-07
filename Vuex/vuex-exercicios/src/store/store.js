@@ -13,6 +13,6 @@ export default new Vuex.Store({
         nome: 'Maria',
         sobrenome: 'Silva'
     },
-    getters,
+    getters, // o mesmo pode ser feito para mutations, actions...
     modules: { carrinho, parametros }
 })
